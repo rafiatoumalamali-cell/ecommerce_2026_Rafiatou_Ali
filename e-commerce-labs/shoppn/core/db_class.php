@@ -1,5 +1,5 @@
 <?php
-class Database {
+class DbClass {
     protected $conn;
     public function __construct() {
         require_once 'db_cred.php';

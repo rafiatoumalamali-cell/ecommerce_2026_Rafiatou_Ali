@@ -1,35 +1,338 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #FFC0CB 0%, #FFE4E1 50%, #FFC0CB 100%);
+    color: #000000;
+    min-height: 100vh;
 }
 
 header {
-    background: #222;
+    background: linear-gradient(135deg, #A52A2A 0%, #8B4513 100%);
     color: #fff;
-    padding: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-nav a {
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo a {
     color: #fff;
-    margin-right: 15px;
+    font-size: 32px;
+    font-weight: bold;
     text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-form input {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.search-form button {
+    padding: 12px 25px;
+    background: #FFC0CB;
+    color: #000000;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.search-form button:hover {
+    background: #FFB6C1;
+    transform: scale(1.05);
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.main-nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.1);
+}
+
+.main-nav a:hover {
+    background: #FFC0CB;
+    color: #000000;
+    transform: translateY(-2px);
 }
 
 main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.home-content {
+    text-align: center;
+    padding: 80px 40px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+}
+
+.home-content h1 {
+    font-size: 56px;
+    color: #A52A2A;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.home-content p {
+    font-size: 20px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.features {
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 60px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    transition: all 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.feature-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    color: #A52A2A;
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.feature-card p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.cta-section {
+    margin-top: 60px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 50px;
+    background: linear-gradient(135deg, #A52A2A 0%, #8B4513 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 5px 20px rgba(165, 42, 42, 0.3);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(165, 42, 42, 0.5);
 }
 
 aside {
     width: 220px;
-    background: #f4f4f4;
-    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
 }
 
 footer {
-    background: #eee;
+    background: #000000;
+    color: #FFC0CB;
     text-align: center;
+    padding: 30px;
+    margin-top: 60px;
+}
+
+/* Login and Register Form Styles */
+main h2 {
+    color: #A52A2A;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 36px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.auth-form {
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.95);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+}
+
+.auth-form .form-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+    background: #fff;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #A52A2A;
+    box-shadow: 0 0 15px rgba(165, 42, 42, 0.3);
+}
+
+.auth-form .password-toggle {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #A52A2A;
+    font-size: 20px;
+    user-select: none;
+}
+
+.auth-form .password-toggle:hover {
+    color: #FFC0CB;
+}
+
+.auth-form button {
+    width: 100%;
     padding: 15px;
+    background: linear-gradient(135deg, #A52A2A 0%, #8B4513 100%);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.auth-form button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(165, 42, 42, 0.4);
+}
+
+.auth-form button:active {
+    transform: translateY(-1px);
+}
+
+.auth-form + p {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 16px;
+}
+
+.auth-form + p a {
+    color: #A52A2A;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.auth-form + p a:hover {
+    color: #FFC0CB;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .site-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .search-form {
+        width: 100%;
+        max-width: none;
+    }
+
+    .main-nav ul {
+        justify-content: center;
+    }
+
+    .home-content h1 {
+        font-size: 36px;
+    }
+
+    .home-content p {
+        font-size: 16px;
+    }
+
+    .auth-form {
+        padding: 30px;
+        max-width: 100%;
+    }
+
+    aside {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    main {
+        flex-direction: column;
+    }
 }
