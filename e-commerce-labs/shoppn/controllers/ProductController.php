@@ -10,24 +10,54 @@ class ProductController
         $this->product = new ProductClass();
     }
 
-    public function addBrand($data = [])
+    public function addBrand($name = '')
     {
-        return $this->product->addBrand($data);
+        return $this->product->addBrand($name);
     }
 
-    public function updateBrand($id = 0, $data = [])
+    public function getAllBrands()
     {
-        return $this->product->updateBrand($id, $data);
+        return $this->product->getAllBrands();
     }
 
-    public function addCategory($data = [])
+    public function getBrandById($id = 0)
     {
-        return $this->product->addCategory($data);
+        return $this->product->getBrandById($id);
     }
 
-    public function updateCategory($id = 0, $data = [])
+    public function updateBrand($id = 0, $name = '')
     {
-        return $this->product->updateCategory($id, $data);
+        return $this->product->updateBrand($id, $name);
+    }
+
+    public function deleteBrand($id = 0)
+    {
+        return $this->product->deleteBrand($id);
+    }
+
+    public function addCategory($name = '')
+    {
+        return $this->product->addCategory($name);
+    }
+
+    public function getAllCategories()
+    {
+        return $this->product->getAllCategories();
+    }
+
+    public function getCategoryById($id = 0)
+    {
+        return $this->product->getCategoryById($id);
+    }
+
+    public function updateCategory($id = 0, $name = '')
+    {
+        return $this->product->updateCategory($id, $name);
+    }
+
+    public function deleteCategory($id = 0)
+    {
+        return $this->product->deleteCategory($id);
     }
 
     public function addProduct($data = [])

@@ -1,0 +1,2 @@
+ALTER TABLE customer
+ADD COLUMN is_active TINYINT(1) NOT NULL DEFAULT 1 AFTER user_role;
