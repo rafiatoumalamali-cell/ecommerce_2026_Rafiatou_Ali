@@ -16,7 +16,7 @@ $browseBrands = $browseController->getAllBrands();
             <h3 id="sidebar-products-title"><span aria-hidden="true">▦</span> Products</h3>
             <ul>
                 <li>
-                    <a class="sidebar-all-products" href="/e-commerce-labs/shoppn/views/all_products.php">
+                    <a class="sidebar-all-products" href="/e-commerce-labs/shoppn/index.php">
                         <span>Browse all products</span>
                         <span class="sidebar-chevron" aria-hidden="true">›</span>
                     </a>
@@ -30,7 +30,7 @@ $browseBrands = $browseController->getAllBrands();
                 <?php if (!empty($browseCategories)): ?>
                     <?php foreach ($browseCategories as $category): ?>
                         <li>
-                            <a href="/e-commerce-labs/shoppn/views/all_products.php?category_id=<?php echo (int) $category['cat_id']; ?>">
+                            <a href="/e-commerce-labs/shoppn/index.php?cat=<?php echo (int) $category['cat_id']; ?>#home-products">
                                 <?php echo htmlspecialchars($category['cat_name']); ?>
                                 <span class="sidebar-chevron" aria-hidden="true">›</span>
                             </a>
@@ -48,7 +48,7 @@ $browseBrands = $browseController->getAllBrands();
                 <?php if (!empty($browseBrands)): ?>
                     <?php foreach ($browseBrands as $brand): ?>
                         <li>
-                            <a href="/e-commerce-labs/shoppn/views/all_products.php?brand_id=<?php echo (int) $brand['brand_id']; ?>">
+                            <a href="/e-commerce-labs/shoppn/index.php?brand=<?php echo (int) $brand['brand_id']; ?>#home-products">
                                 <?php echo htmlspecialchars($brand['brand_name']); ?>
                                 <span class="sidebar-chevron" aria-hidden="true">›</span>
                             </a>

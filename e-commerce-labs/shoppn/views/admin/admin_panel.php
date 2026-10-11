@@ -29,7 +29,7 @@ include __DIR__ . '/../layout/header.php';
         <div class="admin-card">
             <span class="card-icon">🛍️</span>
             <h3><a href="/e-commerce-labs/shoppn/views/admin/product.php">Manage Products</a></h3>
-            <p>Control stock, pricing, and catalog visibility.</p>
+            <p>Add products and update their details, images, categories, and brands.</p>
         </div>
     </div>
 </main>

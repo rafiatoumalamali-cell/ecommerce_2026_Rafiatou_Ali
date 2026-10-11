@@ -60,13 +60,53 @@ class ProductController
         return $this->product->deleteCategory($id);
     }
 
-    public function addProduct($data = [])
+    public function addProduct($cat, $brand, $title, $price, $desc, $image_filename, $keywords, $stockQuantity)
     {
-        return $this->product->addProduct($data);
+        return $this->product->addProduct($cat, $brand, $title, $price, $desc, $image_filename, $keywords, $stockQuantity);
     }
 
-    public function updateProduct($id = 0, $data = [])
+    public function updateProduct($id, $cat, $brand, $title, $price, $desc, $image_filename, $keywords, $stockQuantity)
     {
-        return $this->product->updateProduct($id, $data);
+        return $this->product->updateProduct($id, $cat, $brand, $title, $price, $desc, $image_filename, $keywords, $stockQuantity);
+    }
+
+    public function updateStockQuantity($id, $stockQuantity)
+    {
+        return $this->product->updateStockQuantity($id, $stockQuantity);
+    }
+
+    public function deleteProduct($id)
+    {
+        return $this->product->deleteProduct($id);
+    }
+
+    public function getProductById($id)
+    {
+        return $this->product->getProductById($id);
+    }
+
+    public function getAllProducts($categoryId = null, $brandId = null)
+    {
+        return $this->product->getAllProducts($categoryId, $brandId);
+    }
+
+    public function getFeaturedProducts($limit = 6)
+    {
+        return $this->product->getFeaturedProducts($limit);
+    }
+
+    public function getProductsByCategory($catId)
+    {
+        return $this->product->getProductsByCategory($catId);
+    }
+
+    public function getProductsByBrand($brandId)
+    {
+        return $this->product->getProductsByBrand($brandId);
+    }
+
+    public function searchProducts($query)
+    {
+        return $this->product->searchProducts($query);
     }
 }

@@ -100,4 +100,31 @@ function csrf_token() {
 
     return $_SESSION['csrf_token'];
 }
+
+function format_ghs_price($price) {
+    $amount = (float) $price;
+    $decimals = floor($amount) === $amount ? 0 : 2;
+    return number_format($amount, $decimals, '.', ',') . ' GHS';
+}
+
+function app_setting($key) {
+    static $settings = null;
+
+    $environmentValue = getenv($key);
+    if ($environmentValue !== false && $environmentValue !== '') {
+        return $environmentValue;
+    }
+
+    if ($settings === null) {
+        $settingsFile = __DIR__ . '/../.env';
+        $settings = file_exists($settingsFile) ? parse_ini_file($settingsFile, false, INI_SCANNER_RAW) : [];
+        if ($settings === false) {
+            error_log('Unable to parse application .env settings.');
+            $settings = [];
+        }
+    }
+
+    $value = $settings[$key] ?? null;
+    return is_string($value) ? trim($value, " \t\n\r\0\x0B\"'") : null;
+}
 ?>

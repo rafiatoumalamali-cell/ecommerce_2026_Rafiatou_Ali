@@ -1,5 +1,168 @@
--- Shoppn database schema placeholder
-CREATE DATABASE IF NOT EXISTS shoppn;
-USE shoppn;
+-- ============================================================
+-- shoppn e-commerce database — CLEAN SLATE (schema only, no data)
+-- Import: phpMyAdmin → Import this file, OR:
+--   mysql -u root < shoppn_clean.sql
+--
+-- Nothing is pre-created. You are responsible for setting up:
+--   1. Your own admin account
+--   2. Your own customer account(s)
+--   3. Your own brands / categories / products
+--
+-- ── How to create the first admin account ──────────────────
+--   a) Register normally on the site: /views/register.php
+--      (every new signup is created as a regular customer, user_role = 2)
+--   b) Promote that account to admin by running, in phpMyAdmin/mysql:
+--        UPDATE customer SET user_role = 1 WHERE customer_email = 'you@example.com';
+--   c) Log out and back in — the "Admin" link now appears in the header.
+--
+-- ── How to add products ─────────────────────────────────────
+--   Brands and categories are empty too, and products require both
+--   (foreign keys). As admin, add at least one brand and one category
+--   first (Admin → Brands / Admin → Categories) before adding products.
+-- ============================================================
 
--- Add your SQL tables here
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+SET NAMES utf8mb4;
+
+CREATE DATABASE IF NOT EXISTS `shoppn`
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `shoppn`;
+
+-- ── brands ──────────────────────────────────────────────────
+DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `orderdetails`;
+DROP TABLE IF EXISTS `orders`;
+DROP TABLE IF EXISTS `cart`;
+DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `brands`;
+DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `customer`;
+DROP TABLE IF EXISTS `remember_me_tokens`;
+
+CREATE TABLE `brands` (
+  `brand_id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`brand_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── categories ──────────────────────────────────────────────
+CREATE TABLE `categories` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── customer ────────────────────────────────────────────────
+CREATE TABLE `customer` (
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(100) NOT NULL,
+  `customer_email` varchar(50) NOT NULL,
+  `customer_pass` varchar(150) NOT NULL,
+  `customer_country` varchar(30) NOT NULL,
+  `customer_city` varchar(30) NOT NULL,
+  `customer_contact` varchar(15) NOT NULL,
+  `customer_image` varchar(100) DEFAULT NULL,
+  `user_role` int(11) NOT NULL DEFAULT 2,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `secret_keyword` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`customer_id`),
+  UNIQUE KEY `customer_email` (`customer_email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── remember_me_tokens ───────────────────────────────────────
+CREATE TABLE `remember_me_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `selector` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `remember_me_tokens_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ── products ────────────────────────────────────────────────
+CREATE TABLE `products` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_cat` int(11) NOT NULL,
+  `product_brand` int(11) NOT NULL,
+  `product_title` varchar(200) NOT NULL,
+  `product_price` decimal(12,2) NOT NULL,
+  `product_desc` varchar(500) DEFAULT NULL,
+  `product_image` varchar(100) DEFAULT NULL,
+  `product_keywords` varchar(100) DEFAULT NULL,
+  `stock_quantity` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`product_id`),
+  KEY `product_cat` (`product_cat`),
+  KEY `product_brand` (`product_brand`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`product_cat`) REFERENCES `categories` (`cat_id`),
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`product_brand`) REFERENCES `brands` (`brand_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── cart ────────────────────────────────────────────────────
+CREATE TABLE `cart` (
+  `p_id` int(11) NOT NULL,
+  `ip_add` varchar(50) NOT NULL,
+  `c_id` int(11) DEFAULT NULL,
+  `qty` int(11) NOT NULL DEFAULT 1,
+  KEY `p_id` (`p_id`),
+  KEY `c_id` (`c_id`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`p_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── orders ──────────────────────────────────────────────────
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) DEFAULT NULL,
+  `invoice_no` int(11) NOT NULL,
+  `order_date` date NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `order_status` varchar(100) NOT NULL DEFAULT 'pending_payment',
+  `shipping_name` varchar(100) NOT NULL DEFAULT '',
+  `shipping_email` varchar(100) NOT NULL DEFAULT '',
+  `shipping_contact` varchar(30) NOT NULL DEFAULT '',
+  `shipping_address` varchar(255) NOT NULL DEFAULT '',
+  `shipping_city` varchar(100) NOT NULL DEFAULT '',
+  `shipping_country` varchar(100) NOT NULL DEFAULT '',
+  `total_amount` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `currency` char(3) NOT NULL DEFAULT 'GHS',
+  `payment_reference` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `customer_id` (`customer_id`),
+  UNIQUE KEY `uq_orders_payment_reference` (`payment_reference`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── orderdetails ────────────────────────────────────────────
+CREATE TABLE `orderdetails` (
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `unit_price` decimal(12,2) NOT NULL DEFAULT 0.00,
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ── payment ─────────────────────────────────────────────────
+CREATE TABLE `payment` (
+  `pay_id` int(11) NOT NULL AUTO_INCREMENT,
+  `amt` double NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `order_id` int(11) NOT NULL,
+  `currency` text NOT NULL,
+  `reference` varchar(100) DEFAULT NULL,
+  `payment_date` date NOT NULL,
+  PRIMARY KEY (`pay_id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `order_id` (`order_id`),
+  UNIQUE KEY `uq_payment_reference` (`reference`),
+  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+COMMIT;
